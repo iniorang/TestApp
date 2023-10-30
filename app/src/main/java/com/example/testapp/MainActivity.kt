@@ -1,6 +1,9 @@
 package com.example.testapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -22,23 +25,41 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.testapp.ui.theme.TestAppTheme
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.security.AccessController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TestAppTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting()
+            //val preferencesManager = remember { PreferencesManager(context = LocalContext.current) }
+            val sharedPreferences: SharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
+            val navController = rememberNavController()
+
+            var startDestination: String
+            var jwt = sharedPreferences.getString("jwt", "")
+            if(jwt.equals("")){
+                startDestination = "greeting"
+            }else{
+                startDestination = "pagetwo"
+            }
+
+            NavHost(navController, startDestination = startDestination) {
+                composable(route = "greeting") {
+                    Greeting(navController)
+                }
+                composable(route = "pagetwo") {
+                    Homepage(navController)
+                }
+                composable(route = "createuserpage") {
+                    CreateUserPage(navController)
                 }
             }
         }
@@ -50,6 +71,13 @@ class MainActivity : ComponentActivity() {
 fun Greeting() {
     var username by remember { mutableStateOf(TextFieldValue()) }
     var pass by remember { mutableStateOf(TextFieldValue()) }
+    var baseurl = ""
+    val retrofit = Retrofit.builder()
+        .baseUrl(baseurl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(LoginService::class.java)
+    val call = retrofit.getData()
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -74,6 +102,7 @@ fun Greeting() {
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = {
+
             },
             modifier = Modifier.fillMaxWidth()
         ) {
