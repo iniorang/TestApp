@@ -1,7 +1,6 @@
 package com.example.testapp.frontend
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,11 +24,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavController
 import com.example.testapp.PreferencesManager
 import com.example.testapp.data.DataRegister
-import com.example.testapp.respond.LoginGet
 import com.example.testapp.services.RegisterService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -74,28 +69,28 @@ fun AddUserPage(navController: NavController, context: Context = LocalContext.cu
                     .build()
                     .create(RegisterService::class.java)
                 val call = retrofit.saveData(DataRegister(email.text, username.text, password.text))
-                call.enqueue(object : Callback<LoginGet> {
-                    override fun onResponse(
-                        call: Call<LoginGet>,
-                        response: Response<LoginGet>
-                    ) {
-                        print(response.code())
-                        if (response.code() == 200) {
-//                            navController.navigate("Homepage")
-                        } else if (response.code() == 400) {
-                            print("error login")
-                            var toast = Toast.makeText(
-                                context,
-                                "Username atau password salah",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                    override fun onFailure(call: Call<LoginGet>, t: Throwable) {
-                        print(t.message)
-                    }
-
-                })
+//                call.enqueue(object : Callback<LoginGet>{
+//                    override fun onResponse(
+//                        call: Call<LoginGet>,
+//                        response: Response<LoginGet>
+//                    ) {
+//                        print(response.code())
+//                        if (response.code() == 200) {
+////                            navController.navigate("Homepage")
+//                        } else if (response.code() == 400) {
+//                            print("error login")
+//                            var toast = Toast.makeText(
+//                                context,
+//                                "Username atau password salah",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                    }
+//                    override fun onFailure(call: Call<LoginGet>, t: Throwable) {
+//                        print(t.message)
+//                    }
+//
+//                })
             }) {
                 Text("Simpan")
             }

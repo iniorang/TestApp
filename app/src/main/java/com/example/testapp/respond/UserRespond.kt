@@ -1,6 +1,6 @@
 package com.example.testapp.respond
 
-class UserGet {
+class UserRespond {
     var id: Int = 0
     var username : String = ""
     var email : String = ""

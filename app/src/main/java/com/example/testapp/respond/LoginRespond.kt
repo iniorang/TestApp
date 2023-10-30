@@ -2,7 +2,7 @@ package com.example.testapp.respond
 
 import com.google.gson.annotations.SerializedName
 
-class LoginGet {
+class LoginRespond {
     @SerializedName("jwt")
     var jwt : String = ""
 }
