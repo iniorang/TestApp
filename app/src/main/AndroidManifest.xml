@@ -13,6 +13,26 @@
         android:theme="@style/Theme.TestApp"
         tools:targetApi="31">
         <activity
+            android:name=".frontend.AddUser"
+            android:exported="false"
+            android:label="@string/title_activity_add_user"
+            android:theme="@style/Theme.TestApp" />
+        <activity
+            android:name=".frontend.Homepage"
+            android:exported="false"
+            android:label="@string/title_activity_homepage"
+            android:theme="@style/Theme.TestApp" />
+        <activity
+            android:name=".anotherpage.Homepage"
+            android:exported="false"
+            android:label="@string/title_activity_homepage"
+            android:theme="@style/Theme.TestApp" />
+        <activity
+            android:name=".screenui.Homepage"
+            android:exported="false"
+            android:label="@string/title_activity_homepage"
+            android:theme="@style/Theme.TestApp" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
