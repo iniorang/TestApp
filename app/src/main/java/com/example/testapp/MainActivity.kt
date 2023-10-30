@@ -31,7 +31,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.testapp.data.DataLogin
 import com.example.testapp.respond.LoginGet
+import com.example.testapp.services.LoginService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,12 +60,6 @@ class MainActivity : ComponentActivity() {
                 composable(route = "greeting") {
                     Greeting(navController)
                 }
-                composable(route = "pagetwo") {
-                    Homepage(navController)
-                }
-                composable(route = "createuserpage") {
-                    CreateUserPage(navController)
-                }
             }
         }
     }
@@ -79,7 +75,7 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
     var jwt by remember { mutableStateOf("") }
 
     jwt = preferencesManager.getData("jwt")
-    val retrofit = Retrofit.builder()
+    val retrofit = Retrofit.Builder()
         .baseUrl(baseurl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -107,15 +103,14 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
 
         Spacer(modifier = Modifier.height(20.dp))
         ElevatedButton(onClick = {
-            //navController.navigate("pagetwo")
             val retrofit = Retrofit.Builder()
                 .baseUrl(baseurl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(LoginGet::class.java)
-            val call = retrofit.getData(LoginGet(username.text, pass.text))
+                .create(LoginService::class.java)
+            val call = retrofit.getData(DataLogin(username.text, pass.text))
             call.enqueue(object : Callback<LoginGet>{
-                override fun onResponse(call: Call<LoginRespon>, response: Response<LoginRespon>) {
+                override fun onResponse(call: Call<LoginGet>, response: Response<LoginGet>) {
                     print(response.code())
                     if(response.code() == 200){
                         jwt = response.body()?.jwt!!
@@ -124,10 +119,8 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
                     }else if(response.code() == 400){
                         print("error login")
                         var toast = Toast.makeText(context, "Username atau password salah", Toast.LENGTH_SHORT).show()
-
                     }
                 }
-
                 override fun onFailure(call: Call<LoginGet>, t: Throwable) {
                     print(t.message)
                 }
@@ -136,7 +129,7 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
         }) {
             Text(text = "Submit")
         }
-
+        Text(text = jwt)
     }
 }
 
