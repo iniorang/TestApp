@@ -3,6 +3,7 @@ package com.example.testapp
 import android.content.Context
 import android.content.SharedPreferences
 
+
 class PreferencesManager(context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
 

@@ -40,6 +40,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +76,7 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
     val preferencesManager = remember{PreferencesManager(context = context)}
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
-    var baseurl = "http://10.0.2.2:1337/api/"
+    val baseurl = "http://10.0.2.2:1337/api/"
     var jwt by remember { mutableStateOf("") }
 
     jwt = preferencesManager.getData("jwt")
@@ -99,7 +100,7 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
                 .build()
                 .create(LoginService::class.java)
             val call = retrofit.getData(LoginData(username.text, password.text))
-            call.enqueue(object : Callback<LoginRespond>{
+            call.enqueue(object : Callback<LoginRespond> {
                 override fun onResponse(call: Call<LoginRespond>, response: Response<LoginRespond>) {
                     print(response.code())
                     if(response.code() == 200){
@@ -109,10 +110,6 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
                     }else if(response.code() == 400){
                         print("error login")
                         var toast = Toast.makeText(context, "Username atau password salah", Toast.LENGTH_SHORT).show()
-                    }
-                    else if(response.code() == 404){
-                        print("Not configure")
-                        var toast = Toast.makeText(context, "Config Gagal", Toast.LENGTH_SHORT).show()
                     }
                 }
                 override fun onFailure(call: Call<LoginRespond>, t: Throwable) {
