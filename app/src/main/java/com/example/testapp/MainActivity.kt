@@ -108,7 +108,7 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
                         preferencesManager.saveData("jwt", jwt)
                         navController.navigate("homepage")
                     }else if(response.code() == 400){
-                        print("error login")
+                        print("Login error")
                         var toast = Toast.makeText(context, "Username atau password salah", Toast.LENGTH_SHORT).show()
                     }
                 }
