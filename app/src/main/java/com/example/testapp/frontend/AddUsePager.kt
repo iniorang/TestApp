@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavController
 import com.example.testapp.PreferencesManager
-import com.example.testapp.data.DataRegister
+import com.example.testapp.data.RegisterData
 import com.example.testapp.services.RegisterService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -68,7 +68,7 @@ fun AddUserPage(navController: NavController, context: Context = LocalContext.cu
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                     .create(RegisterService::class.java)
-                val call = retrofit.saveData(DataRegister(email.text, username.text, password.text))
+                val call = retrofit.saveData(RegisterData(email.text, username.text, password.text))
 //                call.enqueue(object : Callback<LoginGet>{
 //                    override fun onResponse(
 //                        call: Call<LoginGet>,

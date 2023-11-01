@@ -8,9 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,7 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.testapp.data.DataLogin
+import com.example.testapp.data.LoginData
 import com.example.testapp.frontend.AddUserPage
 import com.example.testapp.frontend.Homepage
 import com.example.testapp.respond.LoginRespond
@@ -48,7 +46,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             val sharedPreferences: SharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
             val navController = rememberNavController()
-
             var startDestination: String
             var jwt = sharedPreferences.getString("jwt", "")
             if(jwt.equals("")){
@@ -95,14 +92,13 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
         OutlinedTextField(value = password, onValueChange = { newText ->
             password = newText
         }, label = { Text("Password") })
-        Spacer(modifier = Modifier.height(20.dp))
         ElevatedButton(onClick = {
             val retrofit = Retrofit.Builder()
                 .baseUrl(baseurl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(LoginService::class.java)
-            val call = retrofit.getData(DataLogin(username.text, password.text))
+            val call = retrofit.getData(LoginData(username.text, password.text))
             call.enqueue(object : Callback<LoginRespond>{
                 override fun onResponse(call: Call<LoginRespond>, response: Response<LoginRespond>) {
                     print(response.code())
@@ -113,14 +109,15 @@ fun Greeting(navController: NavController,context: Context = LocalContext.curren
                     }else if(response.code() == 400){
                         print("error login")
                         var toast = Toast.makeText(context, "Username atau password salah", Toast.LENGTH_SHORT).show()
-
+                    }
+                    else if(response.code() == 404){
+                        print("Not configure")
+                        var toast = Toast.makeText(context, "Config Gagal", Toast.LENGTH_SHORT).show()
                     }
                 }
-
                 override fun onFailure(call: Call<LoginRespond>, t: Throwable) {
                     print(t.message)
                 }
-
             })
         }) {
             Text(text = "Submit")
