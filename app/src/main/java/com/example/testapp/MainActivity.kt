@@ -31,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.testapp.data.LoginData
 import com.example.testapp.frontend.AddUserPage
+import com.example.testapp.frontend.EditUserPage
 import com.example.testapp.frontend.Homepage
 import com.example.testapp.respond.LoginRespond
 import com.example.testapp.services.LoginService
@@ -65,7 +66,14 @@ class MainActivity : ComponentActivity() {
                 composable(route = "newUser"){
                     AddUserPage(navController)
                 }
+                composable(
+                    route = "editUser/{userid}/{username}",
+                ) {backStackEntry ->
+
+                    EditUserPage(navController, backStackEntry.arguments?.getString("userid"), backStackEntry.arguments?.getString("username"))
+                }
             }
+
         }
     }
 }

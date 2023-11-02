@@ -2,4 +2,5 @@
     <string name="app_name">TestApp</string>
     <string name="title_activity_homepage">Homepage</string>
     <string name="title_activity_add_user">AddUser</string>
+    <string name="title_activity_edit_user_page">EditUserPage</string>
 </resources>

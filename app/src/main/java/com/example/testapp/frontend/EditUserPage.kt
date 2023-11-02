@@ -1,7 +1,10 @@
 package com.example.testapp.frontend
 
 import android.content.Context
+import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +13,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -22,11 +26,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.example.testapp.PreferencesManager
 import com.example.testapp.data.RegisterData
+import com.example.testapp.data.UpdateData
 import com.example.testapp.respond.LoginRespond
 import com.example.testapp.services.RegisterService
+import com.example.testapp.services.UserServices
+import com.example.testapp.ui.theme.TestAppTheme
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,15 +44,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddUserPage(navController: NavController, context: Context = LocalContext.current) {
+fun EditUserPage(navController: NavController, userId: String?, usernameParameter: String? ,context: Context = LocalContext.current) {
     val preferencesManager = remember { PreferencesManager(context = context) }
-    var username by remember { mutableStateOf(TextFieldValue("")) }
+    var username by remember { mutableStateOf(("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
+    if(usernameParameter != null){
+        username = usernameParameter
+    }
     Scaffold (
         topBar = {
             TopAppBar(
-                title = { Text(text = "Add") },
+                title = { Text(text = "Edit") },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
@@ -72,8 +83,8 @@ fun AddUserPage(navController: NavController, context: Context = LocalContext.cu
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
-                    .create(RegisterService::class.java)
-                val call = retrofit.saveData(RegisterData(email.text, username.text, password.text))
+                    .create(UserServices::class.java)
+                val call = retrofit.save(userId, UpdateData(username))
                 call.enqueue(object : Callback<LoginRespond> {
                     override fun onResponse(
                         call: Call<LoginRespond>,
@@ -81,7 +92,7 @@ fun AddUserPage(navController: NavController, context: Context = LocalContext.cu
                     ) {
                         print(response.code())
                         if (response.code() == 200) {
-                            navController.navigate("Homepage")
+
                         } else if (response.code() == 400) {
                             print("error login")
                             var toast = Toast.makeText(
@@ -91,6 +102,7 @@ fun AddUserPage(navController: NavController, context: Context = LocalContext.cu
                             ).show()
                         }
                     }
+
                     override fun onFailure(call: Call<LoginRespond>, t: Throwable) {
                         print(t.message)
                     }
@@ -99,13 +111,14 @@ fun AddUserPage(navController: NavController, context: Context = LocalContext.cu
             }) {
                 Text("Simpan")
             }
-            ElevatedButton(onClick = {
-                preferencesManager.saveData("jwt", "")
-                navController.navigate("greeting")
-            }) {
-                Text("Logout")
-            }
         }
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview2() {
+    TestAppTheme {
+
+    }
+}
