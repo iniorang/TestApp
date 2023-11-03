@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -27,8 +28,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.testapp.respond.UserRespond
 import com.example.testapp.services.UserServices
@@ -75,7 +78,7 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
         }
 
     })
-    Scaffold (
+    Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate("newUser")
@@ -85,13 +88,14 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
         },
         topBar = {
             TopAppBar(
-                title = { Text(text = "Homepage") },
+                title = { Text(text = "User") },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
             )
-        },) {
+        },
+    ) {
             innerPadding ->
         Column (modifier = Modifier
             .fillMaxSize()
@@ -101,9 +105,12 @@ fun Homepage(navController: NavController, context: Context = LocalContext.curre
                 listUser.forEach { user ->
                     item {
                         Row (modifier = Modifier
-                            .padding(10.dp)
+                            .padding(15.dp)
                             .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = user.username)
+                            Column {
+                                Text(text = user.username, fontSize = 25.sp)
+                                Text(text = user.email)
+                            }
                             Row {
                                 ElevatedButton(onClick = {
                                     val retrofit = Retrofit.Builder()

@@ -2,6 +2,7 @@ package com.example.testapp.frontend
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -56,6 +57,7 @@ fun AddUserPage(navController: NavController, context: Context = LocalContext.cu
             .fillMaxSize()
             .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             OutlinedTextField(value = username, onValueChange = { newText ->
                 username = newText

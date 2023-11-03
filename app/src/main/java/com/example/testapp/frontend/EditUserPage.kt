@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -67,6 +68,7 @@ fun EditUserPage(navController: NavController, userId: String?, usernameParamete
             .fillMaxSize()
             .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             OutlinedTextField(value = username, onValueChange = { newText ->
                 username = newText
@@ -92,7 +94,7 @@ fun EditUserPage(navController: NavController, userId: String?, usernameParamete
                     ) {
                         print(response.code())
                         if (response.code() == 200) {
-
+                            navController.navigate("Homepage")
                         } else if (response.code() == 400) {
                             print("error login")
                             var toast = Toast.makeText(
